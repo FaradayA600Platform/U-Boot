@@ -72,7 +72,7 @@
  * hex number here!
  */
 #define CONFIG_SYS_SDRAM_BASE       0x40000000
-#define CONFIG_SYS_SDRAM_SIZE       SZ_256M
+#define CONFIG_SYS_SDRAM_SIZE       SZ_2G
 #define CONFIG_SYS_LOAD_ADDR        CONFIG_SYS_TEXT_BASE
 
 /*
@@ -83,8 +83,6 @@
  */
 #define CONFIG_SYS_INIT_SP_ADDR \
 	(CONFIG_SYS_SDRAM_BASE + SZ_4K - GENERATED_GBL_DATA_SIZE)
-#define CONFIG_STACKSIZE_IRQ        SZ_32K
-#define CONFIG_STACKSIZE_FIQ        SZ_32K
 
 /*
  * Size of malloc() pool

@@ -792,6 +792,7 @@ config FSL_LS_MDIO
 
 config FTGMAC030
 	bool "Faraday FTGMAC030"
+	select PHYLIB
 	help
 	  This driver provides Faraday GMAC ethernet driver
 

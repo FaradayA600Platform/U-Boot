@@ -85,12 +85,12 @@
  */
 
 /* FTUART is a high speed NS 16C550A compatible UART */
-#define CONFIG_BAUDRATE		115200
-#define CONFIG_CONS_INDEX	1 /* Console Index port 1(COM1) */
-#define CONFIG_SYS_NS16550_COM1	CONFIG_FTUART010_BASE
+/*#define CONFIG_BAUDRATE		115200*/
+/*#define CONFIG_CONS_INDEX	1*/ /* Console Index port 1(COM1) */
+/*#define CONFIG_SYS_NS16550_COM1	CONFIG_FTUART010_BASE*/
 /*#define CONFIG_SYS_NS16550*/
-#define CONFIG_SYS_NS16550_SERIAL
-#define CONFIG_SYS_NS16550_CLK		18432000
+/*#define CONFIG_SYS_NS16550_SERIAL*/
+/*#define CONFIG_SYS_NS16550_CLK		18432000*/
 
 /*
  * Command line configuration.
@@ -124,8 +124,8 @@
  */
 
 
-#define PHYS_SDRAM_1		0x81000000
-#define PHYS_SDRAM_1_SIZE	SZ_256M
+#define PHYS_SDRAM_1		0x80000000
+#define PHYS_SDRAM_1_SIZE	SZ_512M
 
 
 /*

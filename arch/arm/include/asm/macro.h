@@ -137,7 +137,7 @@ lr	.req	x30
 	lsl	\xreg1, \xreg1, #40
 	lsr	\xreg1, \xreg1, #40
 	orr	\xreg1, \xreg1, \xreg2
-#ifdef CONFIG_ARCH_A600
+#if defined(CONFIG_ARCH_A500) || defined(CONFIG_ARCH_A600)
 	and	\xreg1, \xreg1, #0xFF
 #endif
 	cbz	\xreg1, \master_label

@@ -299,6 +299,7 @@ check_phy:
 	phy_config(priv->phydev);
 #endif
 
+#ifdef CONFIG_ARCH_LEO
 	ftgmac030_phy_read(dev, priv->phy_addr, MII_BMSR, &status);
 
 	if (!(status & BMSR_LSTATUS)) {
@@ -358,6 +359,12 @@ check_phy:
 	       dev->name, speed ? "100" : "10", duplex ? "full" : "half");
 
 	return 1;
+#else
+	if (phy_startup(priv->phydev))
+		return 1;
+
+	return 0;
+#endif
 }
 
 static int ftgmac030_update_link_speed(struct eth_device *dev)
@@ -369,59 +376,27 @@ static int ftgmac030_update_link_speed(struct eth_device *dev)
 	unsigned short stat_ge;
 	unsigned int maccr;
 
-#ifdef CONFIG_FTGMAC030_EGIGA
-	/* 1000 Base-T Status Register */
-	ftgmac030_phy_read(dev, priv->phy_addr, MII_STAT1000, &stat_ge);
-#endif
-
-	ftgmac030_phy_read(dev, priv->phy_addr, MII_BMSR, &stat_fe);
-	if (!(stat_fe & BMSR_LSTATUS))	/* link status up? */
-		return 0;
-
 	/* read MAC control register and clear related bits */
 	maccr = readl(&ftgmac030->maccr) &
 		~(FTGMAC030_MACCR_GIGA_MODE |
 		  FTGMAC030_MACCR_FAST_MODE |
 		  FTGMAC030_MACCR_FULLDUP);
-#ifdef CONFIG_FTGMAC030_EGIGA
-	if (stat_ge & (LPA_1000FULL | LPA_1000HALF))
-	{
-		if (stat_ge & LPA_1000FULL) {
-			/* set gmac for 1000BaseTX and Full Duplex */
-			maccr |= FTGMAC030_MACCR_GIGA_MODE | FTGMAC030_MACCR_FULLDUP;
-		}
 
-		if (stat_ge & LPA_1000HALF) {
-			/* set gmac for 1000BaseTX and Half Duplex */
-			maccr |= FTGMAC030_MACCR_GIGA_MODE;
-		}
-	}
-	else
-#endif
-	{
-		if (stat_fe & BMSR_100FULL) {
-			/* set MII for 100BaseTX and Full Duplex */
-			maccr |= FTGMAC030_MACCR_FAST_MODE | FTGMAC030_MACCR_FULLDUP;
-		}
-
-		if (stat_fe & BMSR_10FULL) {
-			/* set MII for 10BaseT and Full Duplex */
+	if (priv->phydev->duplex & DUPLEX_FULL) {
 			maccr |= FTGMAC030_MACCR_FULLDUP;
 		}
 
-		if (stat_fe & BMSR_100HALF) {
-			/* set MII for 100BaseTX and Half Duplex */
+	if (priv->phydev->speed == SPEED_1000) {
+		maccr |= FTGMAC030_MACCR_GIGA_MODE;
+	} else if (priv->phydev->speed == SPEED_100) {
 			maccr |= FTGMAC030_MACCR_FAST_MODE;
 		}
 
-		if (stat_fe & BMSR_10HALF) {
-			/* set MII for 10BaseT and Half Duplex */
-			/* we have already clear these bits, do nothing */
-			;
-		}
-	}
 	/* update MII config into maccr */
 	writel(maccr, &ftgmac030->maccr);
+
+	printf("%s: link up, %d Mbps %s-duplex\n", priv->phydev->dev->name,
+	       priv->phydev->speed, priv->phydev->duplex ? "full" : "half");
 
 	return 1;
 }
@@ -572,14 +547,15 @@ static int ftgmac030_init(struct eth_device *dev, struct bd_info *bis)
 	writel(FTGMAC030_RBSR_SIZE(RBSR_DEFAULT_VALUE), &ftgmac030->rbsr);
 
 	/* enable transmitter, receiver */
-	maccr = FTGMAC030_MACCR_TXMAC_EN |
+	maccr = readl(&ftgmac030->maccr);
+	maccr |= (FTGMAC030_MACCR_TXMAC_EN |
 		FTGMAC030_MACCR_RXMAC_EN |
 		FTGMAC030_MACCR_TXDMA_EN |
 		FTGMAC030_MACCR_RXDMA_EN |
 		FTGMAC030_MACCR_CRC_APD |
 		FTGMAC030_MACCR_FULLDUP |
 		FTGMAC030_MACCR_RX_RUNT |
-		FTGMAC030_MACCR_RX_BROADPKT;
+		FTGMAC030_MACCR_RX_BROADPKT);
 
 	writel(maccr, &ftgmac030->maccr);
 

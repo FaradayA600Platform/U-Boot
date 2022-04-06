@@ -25,8 +25,6 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
-#define SCU_FTSCU100_PA_BASE	0x13000000
-
 extern void clock_init(void);
 extern void invalidate_icache_all(void);
 extern void invalidate_dcache_all(void);
@@ -40,22 +38,22 @@ void ftlcd210_init(void)
 {
 	unsigned int i=0;
 
-	writel(0x00000081,0x1300844c);	
-	writel(0x00000001,0x13008434);
-	writel(0x00000061,0x13008438);	
-	writel(0x00000061,0x1300843c);	
-	writel(0x00000061,0x13008440);
-	writel(0x00000061,0x13008444);	
-	writel(0x00000061,0x13008448);
-	writel(0x00340540,0x13008338);	
-	writel(0x00000BFF,0x1300833C);	
-	writel(0x00340541,0x13008338);	
+	writel(0x00000081, SCU_BASE + 0x844c);
+	writel(0x00000001, SCU_BASE + 0x8434);
+	writel(0x00000061, SCU_BASE + 0x8438);
+	writel(0x00000061, SCU_BASE + 0x843c);
+	writel(0x00000061, SCU_BASE + 0x8440);
+	writel(0x00000061, SCU_BASE + 0x8444);
+	writel(0x00000061, SCU_BASE + 0x8448);
+	writel(0x00340540, SCU_BASE + 0x8338);
+	writel(0x00000BFF, SCU_BASE + 0x833C);
+	writel(0x00340541, SCU_BASE + 0x8338);
 
-
+	// delay function ?
         for(i=0;i<0x4000;i++)
-        readl(0x18000000);
+		readl(FTEMC030_0_BASE);
 
-	writel(0x30C43040,0x13008114);	
+	writel(0x30C43040, SCU_BASE + 0x8114);
 }
 
 void sdio_soc_init(void)
@@ -73,7 +71,11 @@ void fotg330_usb_init(void)
 	setbits_le32(SCU_BASE + 0x810c, 0x001d0000);
 	
 	setbits_le32(SCU_BASE + 0x8128, 0x00000004);	// usb3 enable
+#if 0
 	setbits_le32(SCU_BASE + 0x812c, 0x00000008);	// choose SYS_XTAL as u3_coreclk
+#else
+	setbits_le32(SCU_BASE + 0x812c, 0x80000008);	// choose SYS_XTAL as u3_coreclk
+#endif
 	setbits_le32(SCU_BASE + 0x8320, 0x00000850);	// usb3 phy's parameters
 	setbits_le32(SCU_BASE + 0x8118, 0x00000020);	// usb3_aclk enable
 	setbits_le32(SCU_BASE + 0x8130, 0x00002000);	// usb3_rstn enable 
@@ -121,31 +123,30 @@ int board_late_init(void)
 	writel(0x1,0x08200004);
 	writel(0x43,0x08200004);	
 
-
-
 	fotg330_usb_init();
 	sdio_soc_init();	
 #if 1
-	writel(0xff,0x13008118);
-	writel(0xf,0x1300811c);
-	writel(0x7ff,0x13008124);
-	writel(0x7ff,0x13008128);
+	writel(0x000000ff, 0x13008118);
+	writel(0x0000000f, 0x1300811c);
+	writel(0x000007ff, 0x13008124);
+	writel(0x000007ff, 0x13008128);
 	writel(0xffffffff,0x13008130);	
 #endif
 
 #if 1		//for pcie test
-	writel(0xff, SCU_FTSCU100_PA_BASE + 0x8118);
-	writel(0xf, SCU_FTSCU100_PA_BASE + 0x811c);
-	writel(0x7ff, SCU_FTSCU100_PA_BASE + 0x8124);
-	writel(0x7ff, SCU_FTSCU100_PA_BASE + 0x8128);
-	writel(0xffffffff, SCU_FTSCU100_PA_BASE + 0x8130);
+	writel(0x000000ff, SCU_BASE + 0x8118);
+	writel(0x0000000f, SCU_BASE + 0x811c);
+	writel(0x000007ff, SCU_BASE + 0x8124);
+	writel(0x000007ff, SCU_BASE + 0x8128);
+	writel(0xffffffff, SCU_BASE + 0x8130);
 #endif							 
 	ftlcd210_init();	
 
 #if 1
-	writel(0x1, SCU_FTSCU100_PA_BASE + 0x84ac);
+	writel(0x00000001, SCU_BASE + 0x84ac);
 	writel(0x00100000, 0x13400020);
 #endif
+
 	return 0;
 }
 

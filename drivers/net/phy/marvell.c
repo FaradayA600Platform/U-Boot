@@ -457,20 +457,6 @@ static int m88e1116r_config(struct phy_device *phydev)
 	return genphy_config_aneg(phydev);
 }
 
-static int m88e1116r_startup(struct phy_device *phydev)
-{
-	int ret;
-
-	/* Change Page Number */
-	phy_write(phydev, MDIO_DEVAD_NONE, MIIM_88E1118_PHY_PAGE, 0x0000);
-
-	ret = genphy_update_link(phydev);
-	if (ret)
-		return ret;
-
-	return m88e1xxx_parse_status(phydev);
-}
-
 /* Marvell 88E1118 */
 static int m88e1118_config(struct phy_device *phydev)
 {
@@ -684,7 +670,7 @@ static struct phy_driver M88E1116R_driver = {
 	.mask = 0xffffff0,
 	.features = PHY_GBIT_FEATURES,
 	.config = &m88e1116r_config,
-	.startup = &m88e1116r_startup,
+	.startup = &genphy_startup,
 	.shutdown = &genphy_shutdown,
 };
 

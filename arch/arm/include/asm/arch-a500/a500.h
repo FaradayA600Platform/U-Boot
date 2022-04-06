@@ -30,6 +30,9 @@
 
 #endif /* __ASSEMBLY__ */
 
+#define NR_IRQS                 64
+#define FTTMR010_IRQ            13
+
 /*
  * Hardware APB peripheral
  */
@@ -57,11 +60,8 @@
 #define PCIE1PHY_BASE			0x14500000  /* PCIEPHY */
 #define RSA_BASE				0x14600000  
 #define OTGPHY_BASE			0x14700000  
-
-/*#define CONFIG_FTAHBC020_BASE		0x90100000*/	/* AHB Controller */
-/*#define CONFIG_FTTMR010_BASE    	0x90B00000*/	/* Timer */
-
-/*#define CONFIG_FTGMAC030_BASE   0x13900000*/
+#define WDT_BASE                0x14800000  /* WDT */
+#define GIC_BASE                0x18700000  
 
 /*
  * Hardware AHB peripheral
@@ -91,45 +91,20 @@
 #define PCIE0_BASE   			0x18800000  /* PCIE */
 #define PCIE1_BASE   			0x18C00000  /* PCIE */
 
-
-#define NR_IRQS 					64                                                                                                   
-#define FTTMR010_IRQ			13
-
-#define GEM_STATISTICS_TX_OCTECTS_HIGH		0x104
-#define GEM_STATISTICS_TX_OCTECTS_LOW		0x100
-#define GEM_STATISTICS_TX_FRAME				0x108
-#define GEM_STATISTICS_TX_FRAME_64			0X118
-#define GEM_STATISTICS_TX_FRAME_65_127		0x11c
-#define GEM_STATISTICS_TX_FRAME_128_255		0x120
-#define GEM_STATISTICS_TX_FRAME_256_511		0x124
-#define GEM_STATISTICS_TX_FRAME_512_1023	0x120
-#define GEM_STATISTICS_TX_FRAME_1024_1518	0x12c
-#define GEM_STATISTICS_RX_OCTECTS_HIGH		0x154
-#define GEM_STATISTICS_RX_OCTECTS_LOW		0x150
-#define GEM_STATISTICS_RX_FRAME				0x158
-#define GEM_STATISTICS_RX_FRAME_64			0X168
-#define GEM_STATISTICS_RX_FRAME_65_127		0x16c
-#define GEM_STATISTICS_RX_FRAME_128_255		0x170
-#define GEM_STATISTICS_RX_FRAME_256_511		0x174
-#define GEM_STATISTICS_RX_FRAME_512_1023	0x178
-#define GEM_STATISTICS_RX_FRAME_1024_1518	0x17c
-
 /* SCU Base */
-#define SYSC_REG_BASE			0x13000000
+#define SYSC_REG_BASE           SCU_BASE
 
 /* GEM */
 /*
-#define CONFIG_GMAC0_BASE		0x13900000
-#define CONFIG_GMAC1_BASE		0x13A00000
+#define CONFIG_GMAC0_BASE       GMAC0_BASE
+#define CONFIG_GMAC1_BASE       GMAC1_BASE
 */
-#define GMAC_BASE		0x93000000
 #define CONFIG_PHYLIB			1
 #define CONFIG_PHY_MARVELL		1
 
 /* PCIE Gen3*/
 #define PCIE_WRAP_BASE			0x93600000
 #define PCIE_G3_REG_BASE		0x93800000
-
 
 /* SerDes */
 #define SERDES_MEMORY_BASE0		0x92600000
@@ -139,11 +114,15 @@
 
 /* SD/MMC */
 /*
-#define CONFIG_FTSDC021_BASE	0x22a00000
+#define CONFIG_FTSDC021_BASE    0x09200000
 */
-#define FOTG210_BASE0		0xc0800000
-#define FOTG210_BASE1		0xc0900000
+
+/* USB */
+#define FOTG330_BASE0           0x0A000000
+
 /* I2C */
-/*#define CONFIG_FTI2C010_BASE    0x90200000*/
+/*
+#define CONFIG_FTI2C010_BASE    I2C0_BASE
+*/
 
 #endif	/* __A500_H */

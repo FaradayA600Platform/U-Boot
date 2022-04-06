@@ -22,4 +22,8 @@
 #
 
 obj-y	+= board.o clk.o
-#obj-y	+= lowlevel_init.o
+ifdef CONFIG_SPL_BUILD
+obj-y	+= spl.o
+else
+obj-y	+= cmd.o
+endif

@@ -7,8 +7,6 @@
  */
  /dts-v1/;
 
-#include <dt-bindings/interrupt-controller/arm-gic.h>
-
 / {
 	model = "tx5";
 	compatible = "arm,faraday-soc";
@@ -83,7 +81,6 @@
 	timer0: timer@05100000 {
 		compatible = "faraday,fttmr010-timer";
 		reg = <0x05100000 0x1000>;
-		interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
 	};
 	
 	uart0: uart@0c600000 {
@@ -94,14 +91,12 @@
 		reg-shift = <2>;
 		reg-io-width = <4>;
 		no-loopback-test;
-		interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
 	};
 	
 	sd0: sd@02200000 {
 		compatible = "faraday,ftsdc021-sdhci";
 		interrupt-parent = <&gic>;
 		reg = <0x02200000 0x1000>;
-		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
 		bus-width = <4>;
 		status = "okay";
 	};
@@ -110,7 +105,6 @@
 		compatible = "faraday,ftsdc021-sdhci";
 		interrupt-parent = <&gic>;
 		reg = <0x02300000 0x1000>;
-		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
 		bus-width = <4>;
 		status = "disabled";
 	};
@@ -119,7 +113,6 @@
 		compatible = "faraday,ftspi020_spi";
 		interrupt-parent = <&gic>;
 		reg = <0x03600000 0x200>;
-		interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
 		num-cs = <4>;
 		cs = <0>;
 		max_hz = <20000000>;
@@ -146,7 +139,6 @@
 		interrupt-parent = <&gic>;
 		dev_id = <0>;
 		reg = <0x0ca00000 0x1000>;
-		interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
 		clock-frequency = <400000>;
 		status = "okay";
 	};
@@ -156,7 +148,6 @@
 		interrupt-parent = <&gic>;
 		dev_id = <1>;
 		reg = <0x0cb00000 0x1000>;
-		interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
 		clock-frequency = <400000>;
 		status = "okay";
 	};
@@ -166,7 +157,6 @@
 		interrupt-parent = <&gic>;
 		dev_id = <2>;
 		reg = <0x0cc00000 0x1000>;
-		interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
 		clock-frequency = <400000>;
 		status = "okay";
 	};
@@ -176,7 +166,6 @@
 		interrupt-parent = <&gic>;
 		dev_id = <3>;
 		reg = <0x0cd00000 0x1000>;
-		interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
 		clock-frequency = <400000>;
 		status = "okay";
 	};

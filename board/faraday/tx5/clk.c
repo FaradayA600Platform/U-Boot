@@ -44,7 +44,7 @@ static ulong clk_get_rate_mmc(void)
 
 static ulong clk_get_rate_cpu(void)
 {
-	return 1596000000;
+	return 1200000000;
 }
 
 ulong clk_get_rate(char *id)
