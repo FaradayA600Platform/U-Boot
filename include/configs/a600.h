@@ -39,7 +39,7 @@
 /*#define CONFIG_ARMV8_SWITCH_TO_EL1*/
 
 #define COUNTER_FREQUENCY           774000000
-#define CPU_RELEASE_ADDR            0x28030008
+#define CPU_RELEASE_ADDR            0x28030010
 
 /*
  * GIC and Interrupt Configuration Options
@@ -71,8 +71,8 @@
  */
 #define CONFIG_ETHADDR              00:84:14:72:61:69  /* used by common/env_common.c */
 #define CONFIG_NETMASK              255.255.255.0
-#define CONFIG_IPADDR               192.168.1.100
-#define CONFIG_SERVERIP             192.168.1.1
+#define CONFIG_IPADDR               192.168.1.101
+#define CONFIG_SERVERIP             192.168.1.123
 #define CONFIG_NET_MULTI            1
 #define CONFIG_NET_RETRY_COUNT      20
 
@@ -101,7 +101,7 @@
 #define CONFIG_SYS_INIT_SP_ADDR \
 	(CONFIG_SYS_SDRAM_BASE + SZ_4K - GENERATED_GBL_DATA_SIZE)
 
-/*
+/*make CROSS_COMPILE=aarch64-linux-gnu-
  * Size of malloc() pool
  */
 #define CONFIG_SYS_MALLOC_LEN       SZ_2M
@@ -138,7 +138,7 @@
  * Boot with "uImage"
  */
 /*#define CONFIG_BOOTCOMMAND           "sf probe;sf read 0x82000000 0xd00000 0x2000;sf read 0x83080000 0x200000 0xb00000;bootm 0x83080000 - 0x82000000;"*/
-/*#define CONFIG_BOOTCOMMAND           "bootm 0x83080000 - 0x82000000;"*/
+#define CONFIG_BOOTCOMMAND           "tftpboot 0x83080000 uImage;tftpboot 0x83000000 faraday-a600.dtb;bootm 0x83080000 - 0x83000000;"
 /*#define CONFIG_BOOTDELAY             3*/
 
 #endif	/* __CONFIG_H */

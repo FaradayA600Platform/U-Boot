@@ -21,8 +21,16 @@
 #include <dm.h>
 #include <nand.h>
 #include <netdev.h>
+#include <linux/delay.h>
 
 DECLARE_GLOBAL_DATA_PTR;
+
+#define CPU_RELEASE_MAGIC_VALUE          0x41383330
+#define CPU_RELEASE_JUMPPC_VALUE                CONFIG_SYS_TEXT_BASE
+#define CPU_RELEASE_MAGIC_ADDR           0x28030000
+#define CPU_RELEASE_JUMPPC_ADDR                 0x28030004
+
+#define __sev()   __asm__ __volatile__ ("sev" : : : "memory") 
 
 extern void clock_init(void);
 
@@ -36,6 +44,14 @@ int board_init(void)
 {
 	gd->bd->bi_arch_number = MACH_TYPE_FARADAY;
 	gd->bd->bi_boot_params = CONFIG_SYS_SDRAM_BASE + 0x100;
+	
+        writel(CPU_RELEASE_JUMPPC_VALUE, CPU_RELEASE_JUMPPC_ADDR);
+        writel(CPU_RELEASE_MAGIC_VALUE, CPU_RELEASE_MAGIC_ADDR);
+
+        __sev();   
+	    mdelay(10);
+        writel(0, CPU_RELEASE_MAGIC_ADDR);
+        writel(0, CPU_RELEASE_JUMPPC_ADDR);		
 	return 0;
 }
 
