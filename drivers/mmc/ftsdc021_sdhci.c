@@ -1,7 +1,7 @@
 /*
- * (C) Copyright 2013 - 2015 Xilinx, Inc.
+ * (C) Copyright 2021 - 2025 Faraday Technology Corporation.
  *
- * Xilinx Zynq SD Host Controller Interface
+ * Faraday FTSDC021 controller driver.
  *
  * SPDX-License-Identifier:	GPL-2.0+
  */
